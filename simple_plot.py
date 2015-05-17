@@ -11,6 +11,7 @@ import random
 from astropy import units as u
 import mpld3
 from mpld3 import plugins
+from clickable_plugin import ClickInfo
 import pdb
 
 
@@ -178,6 +179,13 @@ def plotData(NQuery, input_table, FigureStrBase, variables, xMin, xMax,
                                                voffset=10, hoffset=10)
             plugins.connect(figure, tooltip)
 
+            urls = ["http://camelot-project.herokuapp.com/point_"+x+"_"+y
+                    for x, y in zip(plot_x[ObsPlot], plot_y[ObsPlot])]
+
+            toolclick = ClickInfo(scatter, urls)
+
+            plugins.connect(figure, toolclick)
+
         if any(SimPlot):
             # Change to logs on next commit
             scatter = \
@@ -205,6 +213,13 @@ def plotData(NQuery, input_table, FigureStrBase, variables, xMin, xMax,
             tooltip = plugins.PointHTMLTooltip(scatter, labels,
                                                voffset=10, hoffset=10, css=css)
             plugins.connect(figure, tooltip)
+
+            urls = ["http://camelot-project.herokuapp.com/point_"+x+"_"+y
+                    for x, y in zip(plot_x[SimPlot], plot_y[SimPlot])]
+
+            toolclick = ClickInfo(scatter, urls)
+
+            plugins.connect(figure, toolclick)
 
     ax.set_xlabel(label_dict[variables[0]], fontsize=16)
     ax.set_ylabel(label_dict[variables[1]], fontsize=16)
